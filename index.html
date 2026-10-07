@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAKAGUE - Estilos e Costura</title>
+    <style>
+        :root {
+            --primary-color: #1a1a1a;
+            --accent-color: #d4af37; /* Tom dourado elegante para moda */
+            --bg-color: #f9f9f9;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Simulação de tela de celular para visualização em desktop, responsivo para mobile */
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            max-height: 900px;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (min-width: 481px) {
+            .app-container {
+                border-radius: 30px;
+                border: 8px solid #333;
+            }
+        }
+
+        /* Cabeçalho */
+        header {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid var(--accent-color);
+        }
+
+        header h1 {
+            font-size: 24px;
+            letter-spacing: 2px;
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 12px;
+            color: #ccc;
+            margin-top: 4px;
+        }
+
+        /* Área de Conteúdo Rolável */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        /* Filtros de Categoria */
+        .filters {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            scrollbar-width: none;
+        }
+
+        .filters::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-btn {
+            background-color: #e0e0e0;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background-color: var(--accent-color);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* Grade de Roupas */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+        }
+
+        .card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .card-info {
+            padding: 10px;
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .card-category {
+            font-size: 11px;
+            color: #777;
+            margin-top: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Menu Inferior Fixo */
+        nav.bottom-nav {
+            background-color: #fff;
+            border-top: 1px solid #eaeaea;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+        }
+
+        .nav-item {
+            background: none;
+            border: none;
+            font-size: 12px;
+            color: #666;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-item.active {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* Modal de Upload */
+        .modal {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            width: 85%;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .modal-content h3 {
+            margin-bottom: 15px;
+            font-size: 16px;
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .btn-cancel {
+            background-color: #ddd;
+            color: #333;
+        }
+
+        .btn-submit {
+            background-color: var(--accent-color);
+            color: #fff;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Cabeçalho -->
+        <header>
+            <h1>MAKAGUE</h1>
+            <p>Seu Ateliê de Estilos e Modelos</p>
+        </header>
+
+        <!-- Conteúdo Principal -->
+        <div class="content">
+            <!-- Filtros por tipo/modelo -->
+            <div class="filters">
+                <button class="filter-btn active" onclick="filterGallery('todos', this)">Todos</button>
+                <button class="filter-btn" onclick="filterGallery('vestido', this)">Vestidos</button>
+                <button class="filter-btn" onclick="filterGallery('casual', this)">Casual</button>
+                <button class="filter-btn" onclick="filterGallery('social', this)">Social</button>
+                <button class="filter-btn" onclick="filterGallery('tradicional', this)">Tradicional</button>
+            </div>
+
+            <!-- Galeria de Imagens -->
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Itens Iniciais -->
+                <div class="card" data-category="vestido">
+                    <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500&auto=format&fit=crop&q=60" alt="Vestido Elegante">
+                    <div class="card-info">
+                        <div class="card-title">Vestido de Gala</div>
+                        <div class="card-category">Vestido</div>
+                    </div>
+                </div>
+                <div class="card" data-category="social">
+                    <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&auto=format&fit=crop&q=60" alt="Terno Social">
+                    <div class="card-info">
+                        <div class="card-title">Terno Slim Fit</div>
+                        <div class="card-category">Social</div>
+                    </div>
+                </div>
+                <div class="card" data-category="casual">
+                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&auto=format&fit=crop&q=60" alt="Estilo Casual">
+                    <div class="card-info">
+                        <div class="card-title">Look Urbano</div>
+                        <div class="card-category">Casual</div>
+                    </div>
+                </div>
+                <div class="card" data-category="tradicional">
+                    <img src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=500&auto=format&fit=crop&q=60" alt="Roupa Tradicional">
+                    <div class="card-info">
+                        <div class="card-title">Estilo Étnico/Tradicional</div>
+                        <div class="card-category">Tradicional</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menu de Navegação Inferior -->
+        <nav class="bottom-nav">
+            <button class="nav-item active">
+                <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                Início
+            </button>
+            <button class="nav-item" onclick="openModal()">
+                <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                Adicionar Foto
+            </button>
+        </nav>
+
+        <!-- Modal para Upload de Nova Foto -->
+        <div class="modal" id="uploadModal">
+            <div class="modal-content">
+                <h3>Adicionar Novo Estilo</h3>
+                <form id="uploadForm">
+                    <div class="form-group">
+                        <label for="photoTitle">Nome do Modelo/Roupa:</label>
+                        <input type="text" id="photoTitle" required placeholder="Ex: Vestido Floral">
+                    </div>
+                    <div class="form-group">
+                        <label for="photoCategory">Categoria/Estilo:</label>
+                        <select id="photoCategory">
+                            <option value="vestido">Vestido</option>
+                            <option value="casual">Casual</option>
+                            <option value="social">Social</option>
+                            <option value="tradicional">Tradicional</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="photoFile">Selecionar Imagem:</label>
+                        <input type="file" id="photoFile" accept="image/*" required>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-cancel" onclick="closeModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-submit">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Filtrar Galeria por Categoria
+        function filterGallery(category, button) {
+            const cards = document.querySelectorAll('.card');
+            const buttons = document.querySelectorAll('.filter-btn');
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            cards.forEach(card => {
+                if (category === 'todos' || card.dataset.category === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Funções do Modal
+        function openModal() {
+            document.getElementById('uploadModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('uploadModal').style.display = 'none';
+            document.getElementById('uploadForm').reset();
+        }
+
+        // Lidar com o Upload de Novas Fotos
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const title = document.getElementById('photoTitle').value;
+            const category = document.getElementById('photoCategory').value;
+            const fileInput = document.getElementById('photoFile');
+            
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const imageUrl = e.target.result;
+                    
+                    // Criar novo elemento de cartão
+                    const galleryGrid = document.getElementById('galleryGrid');
+                    const newCard = document.createElement('div');
+                    newCard.className = 'card';
+                    newCard.dataset.category = category;
+
+                    newCard.innerHTML = `
+                        <img src="${imageUrl}" alt="${title}">
+                        <div class="card-info">
+                            <div class="card-title">${title}</div>
+                            <div class="card-category">${category}</div>
+                        </div>
+                    `;
+
+                    // Adicionar ao topo da galeria
+                    galleryGrid.prepend(newCard);
+
+                    // Fechar modal e resetar
+                    closeModal();
+                }
+
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        });
+    </script>
+</body>
+</html>
